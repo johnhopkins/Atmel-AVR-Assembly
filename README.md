@@ -1,8 +1,8 @@
 # Timer methods
-Timer0
+##Timer0
 
-ClearTimerOnCompareMode.asm
+###ClearTimerOnCompareMode.asm
 A timing subroutine, programmed to fire an interrupt every time the counter compares with a preset.
 
-TimerOverflowMode.asm
+###TimerOverflowMode.asm
 A timing sub routine for AVR MCU's, programmed to fire an interrupt every time the counter overflows.
