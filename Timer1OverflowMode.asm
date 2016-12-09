@@ -1,5 +1,5 @@
 .org 0x0000
-      jmp		reset
+      			jmp		reset
 
 .org OVF1addr
 			jmp		timer1_overflow
