@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Atmel-avr-assembly by johnhopkins</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Atmel-avr-assembly</h1>
+        <h2>AVR Timing methods</h2>
+        <a href="https://github.com/johnhopkins/Atmel-AVR-Assembly" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="timer-methods" class="anchor" href="#timer-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Timer methods</h1>
+
+<h2>
+<a id="8-bit-timers" class="anchor" href="#8-bit-timers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>8 Bit timers</h2>
+
+<p>The ATmega328 has 2, 8-bit timers: Counter0 and Counter2. These timers are controlled by the following registers.</p>
+
+<table>
+<thead>
+<tr>
+<th>Counter 0</th>
+<th>Counter 2</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCCR0A</td>
+<td>TCCR2A</td>
+<td>Timer/Counter Control Register A</td>
+</tr>
+<tr>
+<td>TCCR0B</td>
+<td>TCCR2B</td>
+<td>Timer/Counter Control Register B</td>
+</tr>
+<tr>
+<td>TCNT0</td>
+<td>TCNT2</td>
+<td>Timer/Counter Register</td>
+</tr>
+<tr>
+<td>OCR0A</td>
+<td>OCR2A</td>
+<td>Output Compare Register A</td>
+</tr>
+<tr>
+<td>OCR0B</td>
+<td>OCR2B</td>
+<td>Output Compare Register B</td>
+</tr>
+<tr>
+<td>TIMSK0</td>
+<td>TIMSK2</td>
+<td>Timer/Counter Interrupt Mask Register</td>
+</tr>
+<tr>
+<td>TIFR0</td>
+<td>TIFR2</td>
+<td>Timer/Counter Interrupt Flag Register</td>
+</tr>
+</tbody>
+</table>
+
+<p>The following applies equally to both timers 0 and 2. Substitute n for whichever timer you are working with.</p>
+
+<p>TCCRnA and TCCRnB are used to configure the respective timer.
+TIMSKn controls the interrupts to be enabled. Each counter has 3 interrupts, one for each Output Compare Register and one for overflow.</p>
+
+<table>
+<thead>
+<tr>
+<th>bit</th>
+<th>7</th>
+<th>6</th>
+<th>5</th>
+<th>4</th>
+<th>3</th>
+<th>2</th>
+<th>1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCCRnA</td>
+<td>COMnA1</td>
+<td>COMnA0</td>
+<td>COMnB1</td>
+<td>COMnB0</td>
+<td></td>
+<td></td>
+<td>WGM01</td>
+<td>WGM00</td>
+</tr>
+<tr>
+<td>TCCRnB</td>
+<td>FOCnA</td>
+<td>FOCnB</td>
+<td></td>
+<td></td>
+<td>WGM02</td>
+<td>CS02</td>
+<td>CS01</td>
+<td>CS00</td>
+</tr>
+<tr>
+<td>TIMSKn</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>OCIEnB</td>
+<td>OCIEnA</td>
+<td>TOIEn</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>WGM02, WGM01 and WGM00 are used to set the counters mode.</p>
+
+<table>
+<thead>
+<tr>
+<th>WGM02</th>
+<th>WGM01</th>
+<th>WGM00</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>Normal</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>PWM, Phase Correct</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>Clear Timer on Compare (CTC)</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>Fast PWM</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>Reserved</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>PWM, Phase Correct</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>Reserved</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Fast PWM</td>
+</tr>
+</tbody>
+</table>
+
+<p>An ATmega328 without an external crystal runs at 8MHz. This means that the timer increments 8 million times per second. If we set CS02, CS01 and CS00 then we can slow down this rate to make the timer more flexible for our potential needs. This is known as the prescaler which simply divides the clock by a set amount. For example using divide by 8 would mean that the timer is incremented only 1 million times per second.</p>
+
+<table>
+<thead>
+<tr>
+<th>CS02</th>
+<th>CS01</th>
+<th>CS00</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>No clock source (Timer/Counter stopped)</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>Clock(No prescaling)</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>Clock/8 (From prescaler)</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>Clock/64 (From prescaler)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>Clock/256 (From prescaler)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>Clock/1024 (From prescaler)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>External clock source on T0 pin. Clock on falling edge.</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>External clock source on T0 pin. Clock on rising edge.</td>
+</tr>
+</tbody>
+</table>
+
+<p>COMnA1, COMnA0, COMnB1 and COMnB0 control the behavior of the OCnA (PD6) and OCnB (PD5) pins. These pins can be controlled from the Output Compare Registers (OCRnA/OCRnB).</p>
+
+<p>TCNTn is our actual timer. It is is a simple 8 bit register that increments by 1 on every clock cycle of the MCU. Therefore will count to a maximum of 255 before overflowing back to 0 and repeating indefinitely.</p>
+
+<p>OCRnA and OCRnB are also 8 bit registers that simply hold a user defined value between 0 and 255. These values are compared with the value that the counter is currently at on every clock cycle. If a match is found then depending on how we hace configured the TCCRnA, TCCRnB, and TIMSKn registers will define what happens next.</p>
+
+<h2>
+<a id="16-bit-timer" class="anchor" href="#16-bit-timer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>16 Bit timer</h2>
+
+<p>The ATmega328 has one 16 bit timer. It works like the 8 bit timer, but as it is 16 bit counts to 65335 rather than 255. The registers used by this timer are:</p>
+
+<table>
+<thead>
+<tr>
+<th>Counter1</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCCR1A</td>
+<td>Timer/Counter 1 Control Register A</td>
+</tr>
+<tr>
+<td>TCCR1B</td>
+<td>Timer/Counter 1 Control Register B</td>
+</tr>
+<tr>
+<td>TCCR1C</td>
+<td>Timer/Counter 1 Control Register C</td>
+</tr>
+<tr>
+<td>TCNT1H</td>
+<td>Timer/Counter 1 High Register</td>
+</tr>
+<tr>
+<td>TCNT1L</td>
+<td>Timer/Counter 1 Low Register</td>
+</tr>
+<tr>
+<td>OCR1AH</td>
+<td>Output Compare Register 1 A High</td>
+</tr>
+<tr>
+<td>OCR1AL</td>
+<td>Output Compare Register 1 A Low</td>
+</tr>
+<tr>
+<td>OCR1BH</td>
+<td>Output Compare Register 1 B High</td>
+</tr>
+<tr>
+<td>OCR1BL</td>
+<td>Output Compare Register 1 B Low</td>
+</tr>
+<tr>
+<td>ICR1H</td>
+<td>Input Capture Register 1 High</td>
+</tr>
+<tr>
+<td>ICR1L</td>
+<td>Input Capture Register 1 Low</td>
+</tr>
+<tr>
+<td>TIMSK1</td>
+<td>Timer/Counter Interrupt Mask Register</td>
+</tr>
+<tr>
+<td>TIFR1</td>
+<td>Timer/Counter Interrupt Flag Register</td>
+</tr>
+</tbody>
+</table>
+
+<p>In essence it is very similar to counters 0 and 2. The main differences being that as the MCU's are 8 bit we need to use two bytes to store in some of the registers. These are simply the High and Low registers of each respective word.</p>
+
+<p>TCCR1A, TCCR1B and TCCR1C play a similar role to TCCR0A and TCCR0B. These are shown below.</p>
+
+<table>
+<thead>
+<tr>
+<th>bit</th>
+<th>7</th>
+<th>6</th>
+<th>5</th>
+<th>4</th>
+<th>3</th>
+<th>2</th>
+<th>1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCCR1A</td>
+<td>COM1A1</td>
+<td>COM1A0</td>
+<td>COM1B1</td>
+<td>COM1B0</td>
+<td></td>
+<td></td>
+<td>WGM11</td>
+<td>WGM10</td>
+</tr>
+<tr>
+<td>TCCR1B</td>
+<td>ICNC1</td>
+<td>ICES1</td>
+<td></td>
+<td>WGM13</td>
+<td>WGM12</td>
+<td>CS12</td>
+<td>CS11</td>
+<td>CS10</td>
+</tr>
+<tr>
+<td>TCCR1C</td>
+<td>FOC1A</td>
+<td>FOC1B</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>Some of the differences include</p>
+
+<p>4 mode bits instead of 3 (ie more modes)
+The Force Output Compare bits are in TCCR1C
+Input Capture Noise Canceler bit in TCCR1B (outside the scope of this tutorial)
+Input Capture Edge Select in TCCR1B (outside the scope of this tutorial)
+TCNT1H and TCNT1L are similar to TCNT0, but being a 16 bit counter they are split across 2 registers. Similarly with OCR1AH, OCR1AL, OCR1BH and OCR1BL.</p>
+
+<p>ICR1H and ICR1L don't have any equivalent in the 8 bit timers and allow you to capture the timer value on certain events.</p>
+
+<h2>
+<a id="timer0" class="anchor" href="#timer0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Timer0</h2>
+
+<h3>
+<a id="timer0overflowmodeasm" class="anchor" href="#timer0overflowmodeasm" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/johnhopkins/Atmel-AVR-Assembly/blob/master/Timer0OverflowMode.asm">Timer0OverflowMode.asm</a>
+</h3>
+
+<p>A timing sub routine for AVR MCU's, programmed to fire an interrupt every time the counter overflows.</p>
+
+<h3>
+<a id="cleartimer0oncomparemodeasm" class="anchor" href="#cleartimer0oncomparemodeasm" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/johnhopkins/Atmel-AVR-Assembly/blob/master/ClearTimer0OnCompareMode.asm">ClearTimer0OnCompareMode.asm</a>
+</h3>
+
+<p>A timing subroutine, programmed to fire an interrupt every time the counter compares with a preset.</p>
+
+<h2>
+<a id="timer1" class="anchor" href="#timer1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Timer1</h2>
+
+<h3>
+<a id="timer1overflowmodeasm" class="anchor" href="#timer1overflowmodeasm" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/johnhopkins/Atmel-AVR-Assembly/blob/master/Timer1OverflowMode.asm">Timer1OverflowMode.asm</a>
+</h3>
+
+<p>A timing sub routine for AVR MCU's, programmed to fire an interrupt every time the counter overflows specifically for Timer 1 which uses a 2 byte or 1 word value.</p>
+
+<h3>
+<a id="cleartimer1oncomparemodeasm" class="anchor" href="#cleartimer1oncomparemodeasm" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/johnhopkins/Atmel-AVR-Assembly/blob/master/ClearTimer1OnCompareMode.asm">ClearTimer1OnCompareMode.asm</a>
+</h3>
+
+<p>A timing subroutine, programmed to fire an interrupt every time the counter compares with a preset specifcally for timer 1 using two bytes or 1 word compare values.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/johnhopkins/Atmel-AVR-Assembly/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/johnhopkins/Atmel-AVR-Assembly/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/johnhopkins/Atmel-AVR-Assembly"></a> is maintained by <a href="https://github.com/johnhopkins">johnhopkins</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
