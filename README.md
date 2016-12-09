@@ -1,6 +1,16 @@
 # Timer methods
 ##Timer0
 
+|Counter 0|Counter 2|Description|
+|---------|---------|-----------|
+|TCCR0A|TCCR2A|Timer/Counter Control Register A|
+|TCCR0B|TCCR2B|Timer/Counter Control Register B|
+|TCNT0|TCNT2|Timer/Counter Register|
+|OCR0A|OCR2A|Output Compare Register A|
+|OCR0B|OCR2B|Output Compare Register B|
+|TIMSK0|TIMSK2|Timer/Counter Interrupt Mask Register|
+|TIFR0|TIFR2|Timer/Counter Interrupt Flag Register|
+
 ###[Timer0OverflowMode.asm](https://github.com/johnhopkins/Atmel-AVR-Assembly/blob/master/Timer0OverflowMode.asm)
 A timing sub routine for AVR MCU's, programmed to fire an interrupt every time the counter overflows.
 
