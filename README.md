@@ -22,7 +22,7 @@ TCCRnA and TCCRnB are used to configure the respective timer.
 |---|---|---|---|---|---|---|---|---|
 |TCCRnA|COMnA1|COMnA0|COMnB1|COMnB0|||WGM01|WGM00|
 |TCCRnB|FOCnA|FOCnB|||WGM02|CS02|CS01|CS00|
-|TIMSKn|||||OCIEnB|OCIEnA|TOIEn|
+|TIMSKn||||||OCIEnB|OCIEnA|TOIEn|
 
 TIMSKn controls the interrupts to be enabled. Each counter has 3 interrupts, one for each output compare register and one for timer overflow.
 
