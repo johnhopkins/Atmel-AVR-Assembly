@@ -9,7 +9,7 @@ reset:
 			OUT		SPH, R16
 			LDI		R16, LOW(RAMEND)
 			OUT		SPL, R16
-			SBI		DDRB, 0X05		; SET PORTB0 FOR OUTPUT
+			SBI		DDRB, 0X05			; SET PORTB0 FOR OUTPUT
 
 			ldi		r16, 0x01
 			sts		timsk1, r16
@@ -23,5 +23,5 @@ main_loop:
 			rjmp	main_loop
 
 timer1_overflow:
-			SBI		PINB, 5			; FLIP THE 0 BIT
+			SBI		PINB, 5				; FLIP THE 0 BIT
 			reti
